@@ -1,16 +1,16 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { Logger, ValidationPipe } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { Logger, ValidationPipe } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: ['error', 'warn', 'log', 'debug', 'verbose'],
+    logger: ["error", "warn", "log", "debug", "verbose"],
   });
 
   app.enableCors({
     origin: [process.env.FRONTEND_URL],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   });
 
@@ -18,14 +18,14 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       transform: true,
-    }),
+    })
   );
 
-  app.setGlobalPrefix('/auth-service');
+  app.setGlobalPrefix("/devices-service");
 
   const configService = app.get(ConfigService);
 
-  const port = configService.get<string>('PORT') || 8000;
+  const port = configService.get<string>("PORT") || 8000;
 
   await app.listen(port);
 

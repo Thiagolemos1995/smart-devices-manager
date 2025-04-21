@@ -6,10 +6,10 @@ import { SignupUsecase } from "./usecases/signup.usecase";
 import { UsersRepository } from "src/users/repositories";
 import { LocalStrategy } from "./strategies";
 import { JwtModule } from "@nestjs/jwt";
-import { jwtConfig } from "../config";
 import { ConfigModule } from "@nestjs/config";
 import { SigninUsecase } from "./usecases";
 import { JwtStrategy } from "./strategies";
+import jwtConfig from "src/config/jwt.config";
 
 @Module({
   imports: [
