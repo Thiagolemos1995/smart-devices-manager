@@ -9,6 +9,7 @@
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
+    "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
     "prettier": "^3.5.3",
     "turbo": "^2.5.0",
@@ -23,6 +24,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "@nestjs/jwt": "^11.0.0",
     "@nestjs/passport": "^11.0.5",
     "jose": "^6.0.10",
     "passport": "^0.7.0",

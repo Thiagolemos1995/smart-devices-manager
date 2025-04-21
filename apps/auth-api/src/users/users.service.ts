@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from '../common/dtos';
-import { UsersRepository } from './repositories/users.repository';
+import { Injectable } from "@nestjs/common";
+import { CreateUserDto } from "../common/dtos";
+import { UsersRepository } from "./repositories/users.repository";
 
 @Injectable()
 export class UsersService {
@@ -8,6 +8,10 @@ export class UsersService {
 
   create(createUserDto: CreateUserDto) {
     return this.usersRepository.create(createUserDto);
+  }
+
+  async findById(id: string) {
+    return this.usersRepository.findById(id);
   }
 
   async findByEmail(email: string) {

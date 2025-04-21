@@ -66,8 +66,9 @@ export async function signin(
     await createSession({
       user: {
         id: response.id,
-        email: response.email,
+        name: response.name,
       },
+      accessToken: response.accessToken,
     });
   } catch (error: any) {
     console.error(error);
