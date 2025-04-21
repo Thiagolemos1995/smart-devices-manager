@@ -1,5 +1,17 @@
 import { z } from "zod";
 
+export type FormState =
+  | {
+      error?: {
+        name?: string[];
+        email?: string[];
+        password?: string[];
+        confirmPassword?: string[];
+      };
+      message?: string;
+    }
+  | undefined;
+
 export const SignupFormDataSchema = z
   .object({
     name: z
@@ -26,14 +38,9 @@ export const SignupFormDataSchema = z
 
 export type SignupFormData = z.infer<typeof SignupFormDataSchema>;
 
-export type SignupFormState =
-  | {
-      error?: {
-        name?: string[];
-        email?: string[];
-        password?: string[];
-        confirmPassword?: string[];
-      };
-      message?: string;
-    }
-  | undefined;
+export const SigninFormDataSchema = z.object({
+  email: z.string().email({ message: "Invalid email address" }).trim(),
+  password: z.string().trim(),
+});
+
+export type SigninFormData = z.infer<typeof SigninFormDataSchema>;

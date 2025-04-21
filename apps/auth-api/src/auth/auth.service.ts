@@ -23,7 +23,9 @@ export class AuthService {
 
   async validateUser(payload: LoginDto) {
     const { email, password } = payload;
+
     const user = await this.usersService.findByEmail(email);
+
     if (!user) throw new UnauthorizedException("User not found");
 
     const isPasswordValid = await verify(user.password, password);
