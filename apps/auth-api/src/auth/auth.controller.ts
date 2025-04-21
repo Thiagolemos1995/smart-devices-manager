@@ -1,6 +1,13 @@
-import { Controller, Post, Body, UseGuards, Request } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Request,
+  Req,
+} from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { CreateUserDto, LoginDto } from "../common/dtos";
+import { CreateUserDto } from "../common/dtos";
 import { SignupUsecase } from "./usecases/signup.usecase";
 import { LocalAuthGuard } from "./guards/local-auth";
 
