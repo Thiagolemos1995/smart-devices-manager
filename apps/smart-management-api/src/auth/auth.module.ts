@@ -7,14 +7,17 @@ import { UsersRepository } from "src/users/repositories";
 import { LocalStrategy } from "./strategies";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule } from "@nestjs/config";
-import { SigninUsecase } from "./usecases";
+import { refreshTokenUsecase, SigninUsecase } from "./usecases";
 import { JwtStrategy } from "./strategies";
 import jwtConfig from "src/config/jwt.config";
+import refreshJwtConfig from "src/config/refresh.config";
+import { RefreshStrategy } from "./strategies/refresh-token.strategy";
 
 @Module({
   imports: [
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
+    ConfigModule.forFeature(refreshJwtConfig),
   ],
   controllers: [AuthController],
   providers: [
@@ -23,8 +26,10 @@ import jwtConfig from "src/config/jwt.config";
     UsersRepository,
     SignupUsecase,
     SigninUsecase,
+    refreshTokenUsecase,
     LocalStrategy,
     JwtStrategy,
+    RefreshStrategy,
   ],
 })
 export class AuthModule {}
