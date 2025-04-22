@@ -1,11 +1,12 @@
 import {
   ConflictException,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from "@nestjs/common";
 import { CreateUserDto, LoginDto } from "../common/dtos";
 import { UsersService } from "src/users/users.service";
-import { verify } from "argon2";
+import { hash, verify } from "argon2";
 import { AuthJwtPayload } from "./types/auth/auth-jwtPayload";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
@@ -15,7 +16,8 @@ export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly logger: Logger = new Logger(AuthService.name)
   ) {}
 
   async signup(createUserDto: CreateUserDto) {
@@ -48,6 +50,12 @@ export class AuthService {
   async login(payload: { userId: string; name: string }) {
     const { userId, name } = payload;
     const { accessToken, refreshToken } = await this.generateTokens(userId);
+    const hashedRefreshToken = await hash(refreshToken);
+
+    await this.usersService.updateHashedRefreshToken({
+      userId,
+      hashedRefreshToken,
+    });
 
     return {
       id: userId,
@@ -96,10 +104,18 @@ export class AuthService {
     return currentUser;
   }
 
-  async validateRefreshToken(userId: string) {
+  async validateRefreshToken(userId: string, refreshToken: string) {
     const user = await this.usersService.findById(userId);
 
     if (!user) throw new UnauthorizedException("User not found");
+
+    const refreshTokenMatches = await verify(
+      user.hashedRefreshToken ?? "",
+      refreshToken
+    );
+
+    if (!refreshTokenMatches)
+      throw new UnauthorizedException("Invalid refresh token");
 
     const currentUser = {
       id: user.id,
@@ -110,6 +126,12 @@ export class AuthService {
 
   async refreshToken(userId: string, name: string) {
     const { accessToken, refreshToken } = await this.generateTokens(userId);
+    const hashedRefreshToken = await hash(refreshToken);
+
+    await this.usersService.updateHashedRefreshToken({
+      userId,
+      hashedRefreshToken,
+    });
 
     return {
       id: userId,
@@ -117,5 +139,13 @@ export class AuthService {
       accessToken,
       refreshToken,
     };
+  }
+
+  async signout(userId: string) {
+    this.logger.debug(`Signing out user ${userId} ...`);
+    return await this.usersService.updateHashedRefreshToken({
+      userId,
+      hashedRefreshToken: null,
+    });
   }
 }

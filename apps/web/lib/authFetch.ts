@@ -19,8 +19,10 @@ export async function authFetch(
     ...options.headers,
     Authorization: `Bearer ${session.accessToken}`,
   };
-
-  const response = await fetch(url, options);
+  const response = await fetch(url, {
+    ...options,
+    method: options.method || "GET",
+  });
 
   if (response.status === 401) {
     if (!session.refreshToken) throw new Error("Refresh token not found");

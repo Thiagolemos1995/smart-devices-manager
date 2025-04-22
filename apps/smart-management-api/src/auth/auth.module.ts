@@ -12,6 +12,8 @@ import { JwtStrategy } from "./strategies";
 import jwtConfig from "src/config/jwt.config";
 import refreshJwtConfig from "src/config/refresh.config";
 import { RefreshStrategy } from "./strategies/refresh-token.strategy";
+import { SignoutUsecase } from "./usecases/signout.usecase";
+import { Logger } from "@nestjs/common";
 
 @Module({
   imports: [
@@ -26,10 +28,12 @@ import { RefreshStrategy } from "./strategies/refresh-token.strategy";
     UsersRepository,
     SignupUsecase,
     SigninUsecase,
+    SignoutUsecase,
     refreshTokenUsecase,
     LocalStrategy,
     JwtStrategy,
     RefreshStrategy,
+    Logger,
   ],
 })
 export class AuthModule {}

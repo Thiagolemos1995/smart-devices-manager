@@ -1,6 +1,6 @@
 "use server";
 
-import { createSession, updateSession } from "@/lib/session";
+import { createSession } from "@/lib/session";
 import {
   FormState,
   SigninFormDataSchema,
