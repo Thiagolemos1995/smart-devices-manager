@@ -1,6 +1,6 @@
 "use server";
 
-import { createSession } from "@/lib/session";
+import { createSession, updateSession } from "@/lib/session";
 import {
   FormState,
   SigninFormDataSchema,
@@ -69,13 +69,35 @@ export async function signin(
         name: response.name,
       },
       accessToken: response.accessToken,
+      refreshToken: response.refreshToken,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
     return {
-      message: error.status === 401 ? "Invalid credentials" : error.statusText,
+      message: error instanceof Error ? error.message : "Unknown error",
     };
   }
 
   redirect("/");
+}
+
+export async function refreshToken(oldRefreshToken: string) {
+  try {
+    const { accessToken, refreshToken } =
+      await authService.refreshToken(oldRefreshToken);
+
+    const updateResponse = await fetch("/api/auth/update", {
+      method: "POST",
+      body: JSON.stringify({ accessToken, refreshToken }),
+    });
+
+    if (!updateResponse.ok) throw new Error("Failed to update session");
+
+    return accessToken;
+  } catch (error) {
+    console.error("Error refreshing token", error);
+    return {
+      message: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
 }

@@ -10,7 +10,12 @@ export type Session = {
     name: string;
   };
   accessToken: string;
-  // refreshToken: string;
+  refreshToken: string;
+};
+
+export type SessionPayload = {
+  accessToken: string;
+  refreshToken: string;
 };
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -59,4 +64,31 @@ export async function getSession() {
 
 export async function deleteSession() {
   (await cookies()).delete("session");
+}
+
+export async function updateSession({
+  accessToken,
+  refreshToken,
+}: SessionPayload) {
+  const cookie = (await cookies()).get("session")?.value;
+
+  if (!cookie) {
+    throw new Error("Session not found");
+  }
+
+  const { payload } = await jwtVerify<Session>(cookie, encodedKey);
+
+  if (!payload) {
+    throw new Error("Invalid session");
+  }
+
+  const newPayload = {
+    user: {
+      ...payload.user,
+    },
+    accessToken,
+    refreshToken,
+  };
+
+  await createSession(newPayload);
 }
