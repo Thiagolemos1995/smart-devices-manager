@@ -1,7 +1,7 @@
-import { CustomBaseEntity } from '../../common/interfaces';
-import { Entity, Column } from 'typeorm';
+import { CustomBaseEntity } from "../../common/interfaces";
+import { Entity, Column } from "typeorm";
 
-@Entity('users')
+@Entity("users")
 export class User extends CustomBaseEntity {
   @Column()
   name: string;
@@ -11,6 +11,9 @@ export class User extends CustomBaseEntity {
 
   @Column()
   password: string;
+
+  @Column({ type: "varchar", nullable: true })
+  hashedRefreshToken: string | null;
 
   constructor(data: Partial<User>) {
     super();

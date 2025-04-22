@@ -1,7 +1,11 @@
 import { DataSource } from "typeorm";
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from "@nestjs/common";
 import { User } from "../entities";
-import { CreateUserDto } from "../../common/dtos";
+import { CreateUserDto, UpdateHashedRefreshTokenDto } from "../../common/dtos";
 import { hash } from "argon2";
 
 @Injectable()
@@ -35,5 +39,38 @@ export class UsersRepository {
   async findByEmail(email: string): Promise<User | null> {
     const em = this.dataSource.createEntityManager();
     return em.findOne(User, { where: { email } });
+  }
+
+  async updateHashedRefreshToken(payload: UpdateHashedRefreshTokenDto) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const entityManager = queryRunner.manager;
+
+      const user = await entityManager.findOne(User, {
+        where: { id: payload.userId },
+      });
+
+      if (!user) {
+        throw new NotFoundException("User not found");
+      }
+
+      entityManager.merge(User, user, {
+        hashedRefreshToken: payload.hashedRefreshToken ?? null,
+      });
+
+      const updatedUser = await entityManager.save(user);
+      await queryRunner.commitTransaction();
+
+      return updatedUser;
+    } catch (error: unknown) {
+      await queryRunner.rollbackTransaction();
+
+      throw new InternalServerErrorException(error);
+    } finally {
+      await queryRunner.release();
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { CreateUserDto } from "../common/dtos";
+import { CreateUserDto, UpdateHashedRefreshTokenDto } from "../common/dtos";
 import { UsersRepository } from "./repositories/users.repository";
 
 @Injectable()
@@ -16,5 +16,9 @@ export class UsersService {
 
   async findByEmail(email: string) {
     return this.usersRepository.findByEmail(email);
+  }
+
+  async updateHashedRefreshToken(payload: UpdateHashedRefreshTokenDto) {
+    return this.usersRepository.updateHashedRefreshToken(payload);
   }
 }
