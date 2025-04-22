@@ -78,7 +78,7 @@ export async function signin(
     };
   }
 
-  redirect("/");
+  redirect("/dashboard");
 }
 
 export async function refreshToken(oldRefreshToken: string) {

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -11,7 +13,6 @@ import {
   BarChart,
   Zap,
 } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -29,13 +30,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useRouter } from "next/navigation";
 
 export default function LandingPage() {
+  const router = useRouter();
+
   return (
     <div className="flex min-h-screen flex-col w-full">
       <main className="flex-1 w-full">
         {/* Hero Section */}
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
+        <section className="w-full py-6 md:py-12 lg:py-24 xl:py-32">
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
               <div className="flex flex-col justify-center space-y-4">
@@ -52,11 +56,12 @@ export default function LandingPage() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Button size="lg" className="gap-1">
+                  <Button
+                    size="lg"
+                    className="gap-1"
+                    onClick={() => router.push("/auth/signin")}
+                  >
                     Get Started <ArrowRight className="h-4 w-4" />
-                  </Button>
-                  <Button size="lg" variant="outline">
-                    View Demo
                   </Button>
                 </div>
               </div>
@@ -511,7 +516,6 @@ export default function LandingPage() {
               </Card>
               <Card className="border-primary">
                 <CardHeader>
-                  <Badge className="absolute right-4 top-20">Popular</Badge>
                   <CardTitle>Premium</CardTitle>
                   <CardDescription>For medium-sized homes</CardDescription>
                   <div className="mt-4 flex items-baseline text-5xl font-bold">
