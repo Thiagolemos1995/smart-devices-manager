@@ -19,7 +19,7 @@ export default async function SigninButton() {
         </>
       ) : (
         <>
-          <p>{session.user.name}</p>
+          <p className="text-sm">{session.user.name}</p>
           <Link href="/api/auth/signout">
             <LogOut className="w-6 h-6 hover:scale-110 transition-all duration-300" />
           </Link>
