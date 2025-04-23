@@ -6,37 +6,71 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Request,
+  Query,
 } from "@nestjs/common";
-import { DevicesService } from "./devices.service";
 import { CreateDeviceDto } from "./dto/create-device.dto";
 import { UpdateDeviceDto } from "./dto/update-device.dto";
+import {
+  RegisterDeviceUsecase,
+  FetchDevicesUsecase,
+  FindOneDeviceUsecase,
+  UpdateDeviceUsecase,
+  SoftDeleteDeviceUsecase,
+} from "./usecases";
+import { JwtAuthGuard } from "src/auth/guards/jwt-auth";
+import { DevicesFilterDto } from "./dto";
 
 @Controller("devices")
 export class DevicesController {
-  constructor(private readonly devicesService: DevicesService) {}
+  constructor(
+    private readonly registerDeviceUsecase: RegisterDeviceUsecase,
+    private readonly fetchDevicesUsecase: FetchDevicesUsecase,
+    private readonly findOneDeviceUsecase: FindOneDeviceUsecase,
+    private readonly updateDeviceUsecase: UpdateDeviceUsecase,
+    private readonly softDeleteDeviceUsecase: SoftDeleteDeviceUsecase
+  ) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post("register")
-  registerDevice(@Body() createDeviceDto: CreateDeviceDto) {
-    return this.devicesService.registerDevice(createDeviceDto);
+  async registerDevice(
+    @Request() req,
+    @Body() createDeviceDto: CreateDeviceDto
+  ) {
+    createDeviceDto.userId = req.user.id;
+    const response = await this.registerDeviceUsecase.execute(createDeviceDto);
+
+    return {
+      message: "Device registered successfully",
+      data: response,
+    };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
-    return this.devicesService.findAll();
+  async findAll(@Query() query: DevicesFilterDto) {
+    return await this.fetchDevicesUsecase.execute(query);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.devicesService.findOne(+id);
+  async findOne(@Param("id") id: string) {
+    return await this.findOneDeviceUsecase.execute(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(":id")
-  update(@Param("id") id: string, @Body() updateDeviceDto: UpdateDeviceDto) {
-    return this.devicesService.update(+id, updateDeviceDto);
+  async update(
+    @Param("id") id: string,
+    @Body() updateDeviceDto: UpdateDeviceDto
+  ) {
+    return await this.updateDeviceUsecase.execute(id, updateDeviceDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.devicesService.remove(+id);
+  async remove(@Param("id") id: string) {
+    return await this.softDeleteDeviceUsecase.execute(id);
   }
 }

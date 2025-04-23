@@ -1,7 +1,8 @@
 import { CustomBaseEntity } from "../../common/interfaces";
 import { Column, Entity, ManyToOne, JoinColumn } from "typeorm";
-import { DeviceType } from "../enums/device-type.enum";
+import { DeviceTypeEnum } from "../enums/device-type.enum";
 import { User } from "../../users/entities/user.entity";
+import { DeviceStatusEnum } from "./device-status.entity";
 
 @Entity("devices")
 export class Device extends CustomBaseEntity {
@@ -12,11 +13,11 @@ export class Device extends CustomBaseEntity {
   @Column()
   name: string;
 
-  @Column({ type: "enum", enum: DeviceType })
-  type: DeviceType;
+  @Column({ type: "enum", enum: DeviceTypeEnum })
+  type: DeviceTypeEnum;
 
-  @Column()
-  status: string;
+  @Column({ type: "enum", enum: DeviceStatusEnum })
+  status: DeviceStatusEnum;
 
   @Column()
   isActive: boolean;

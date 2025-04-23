@@ -1,4 +1,4 @@
-export enum DeviceType {
+export enum DeviceTypeEnum {
   LIGHT = "light",
   SPEAKER = "speaker",
   THERMOSTAT = "thermostat",
