@@ -6,6 +6,7 @@ import serverConfig from "./config/server.config";
 import databaseConfig from "./config/database.config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UsersModule } from "./users/users.module";
+import { DevicesModule } from "./devices/devices.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UsersModule } from "./users/users.module";
     TypeOrmModule.forRoot(databaseConfig()),
     AuthModule,
     UsersModule,
+    DevicesModule,
   ],
 
   controllers: [],

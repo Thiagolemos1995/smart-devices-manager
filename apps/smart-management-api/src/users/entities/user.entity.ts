@@ -1,5 +1,6 @@
 import { CustomBaseEntity } from "../../common/interfaces";
-import { Entity, Column } from "typeorm";
+import { Entity, Column, OneToMany } from "typeorm";
+import { Device } from "../../devices/entities/device.entity";
 
 @Entity("users")
 export class User extends CustomBaseEntity {
@@ -14,6 +15,9 @@ export class User extends CustomBaseEntity {
 
   @Column({ type: "varchar", nullable: true })
   hashedRefreshToken: string | null;
+
+  @OneToMany(() => Device, (device) => device.user)
+  devices: Device[];
 
   constructor(data: Partial<User>) {
     super();
