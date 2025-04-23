@@ -1,3 +1,5 @@
-export default async function Dashboard() {
-  return <div>Dashboard</div>;
+import Dashboard from "@/features/Dashboard";
+
+export default async function DashboardPage() {
+  return <Dashboard />;
 }

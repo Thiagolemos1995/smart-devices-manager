@@ -18,11 +18,11 @@ export default async function SigninButton() {
           </Link>
         </div>
       ) : (
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col gap-2 w-full">
           <p className="text-sm">{session.user.name}</p>
           <Link
             href="/api/auth/signout"
-            className="flex items-center gap-2 cursor-pointer hover:scale-105 transition-all duration-300"
+            className="flex items-center gap-2 cursor-pointer hover:bg-gray-500 hover:scale-105 transition-all duration-300 rounded-full p-2 w-full"
           >
             Logout
             <LogOut className="w-6 h-6" />
