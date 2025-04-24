@@ -4,6 +4,7 @@ import { UsersService } from "src/users/users.service";
 import { DevicesRepository } from "./repositories";
 import { Device } from "./entities/device.entity";
 import { DevicesFilterDto } from "./dto/devices-filter.dto";
+import { User } from "src/users/entities/user.entity";
 
 @Injectable()
 export class DevicesService {
@@ -52,18 +53,24 @@ export class DevicesService {
     }
   }
 
-  async findAll(payload: DevicesFilterDto): Promise<DevicesResponse> {
+  async findAll(
+    payload: DevicesFilterDto,
+    user: User
+  ): Promise<DevicesResponse> {
     this.logger.log(
       `Finding all devices with filters: ${JSON.stringify(payload)}`
     );
     const { order = "DESC", skip = 0, take = 10 } = payload;
 
     try {
-      const devices = await this.devicesRepository.findAllDevices({
-        order,
-        skip,
-        take,
-      });
+      const devices = await this.devicesRepository.findAllDevices(
+        {
+          order,
+          skip,
+          take,
+        },
+        user
+      );
 
       const result = new DevicesResponse({
         metadata: {

@@ -22,7 +22,7 @@ export const devicesService = {
   },
 
   fetchDevice: async (id: string) => {
-    const response = await fetch(`${baseUrl}/${id}`, {
+    const response = await authFetch(`${baseUrl}/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -51,7 +51,7 @@ export const devicesService = {
   },
 
   updateDevice: async (id: string, device: Device) => {
-    const response = await fetch(`${baseUrl}/${id}`, {
+    const response = await authFetch(`${baseUrl}/${id}`, {
       method: "PUT",
       body: JSON.stringify(device),
       headers: {

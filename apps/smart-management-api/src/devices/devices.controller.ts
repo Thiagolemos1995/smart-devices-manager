@@ -49,8 +49,8 @@ export class DevicesController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  async findAll(@Query() query: DevicesFilterDto) {
-    return await this.fetchDevicesUsecase.execute(query);
+  async findAll(@Query() query: DevicesFilterDto, @Request() req) {
+    return await this.fetchDevicesUsecase.execute(query, req.user);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -9,11 +9,15 @@ import { DevicesFilterDto } from "../dto/devices-filter.dto";
 export class DevicesRepository {
   constructor(private readonly dataSource: DataSource) {}
 
-  async findAllDevices(payload: DevicesFilterDto): Promise<[Device[], number]> {
+  async findAllDevices(
+    payload: DevicesFilterDto,
+    user: User
+  ): Promise<[Device[], number]> {
     const entityManager = this.dataSource.createEntityManager();
 
     const { order, skip, take } = payload;
     const result = await entityManager.findAndCount(Device, {
+      where: { user },
       order: {
         createdAt: order ?? "DESC",
       },
