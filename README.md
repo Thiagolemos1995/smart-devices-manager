@@ -1,84 +1,112 @@
-# Turborepo starter
+# ClientManagement
 
-This Turborepo starter is maintained by the Turborepo core team.
+Este é um sistema de gerenciamento de clientes.
 
-## Using this example
+Nesta plataforma será possível gerenciar clientes e gerar um plano de percurso
+listando em ordem otimizada qual cliente deve ser visitado.
 
-Run the following command:
+## Tecnologias utilizadas
 
-```sh
-npx create-turbo@latest
-```
+Foi utilizado como gerenciador do respositório o TurboRepo.
 
-## What's inside?
+O TurboRepo é uma ferramenta que permite gerenciar múltiplos repositórios e projetos em um único workspace, facilitando a colaboração e o desenvolvimento de projetos.
 
-This Turborepo includes the following packages/apps:
+<a alt="TurboRepo logo" href="https://turborepo.com/docs" target="_blank" rel="noreferrer"><img src="https://images.seeklogo.com/logo-png/42/1/turborepo-logo-png_seeklogo-428038.png" width="45"></a>
 
-### Apps and Packages
+---
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+Para a aplicação Back end foi utilizado NestJS.
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+O NestJS é um framework Node, que utiliza o padrão typescript, onde podemos desenvolver utilizando injeções de dependências, tornando
+mais simples o desenvolvimento das aplicações.
 
-### Utilities
+<a alt="Nest logo" href="https://nestjs.com/" target="_blank" rel="noreferrer"><img src="https://avatars.githubusercontent.com/u/28507035?s=48&v=4" width="45"></a>
 
-This Turborepo has some additional tools already setup for you:
+---
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+Como banco de dados foi utilizado Postgresql.
 
-### Build
+O Postgresql é um sistema gerenciador de banco de dados e relacional de código aberto.
 
-To build all apps and packages, run the following command:
+<a alt="postgres logo" href="https://www.postgresql.org/" target="_blank" rel="noreferrer"><img src="https://avatars.githubusercontent.com/u/177543?s=200&v=4" width="45"></a>
 
-```
-cd my-turborepo
-pnpm build
-```
+---
 
-### Develop
+Para o Front end foi utilizado NextJS.
 
-To develop all apps and packages, run the following command:
+O NextJS é um framework React, uma poderosa ferramenta de desenvolvimento, onde é possível renderizar componentes e realizar o data fetching no lado do servidor
+disponibilizando uma melhor performance para aplicação.
 
-```
-cd my-turborepo
-pnpm dev
-```
+<a alt="Next logo" href="https://nextjs.org/" target="_blank" rel="noreferrer"><img src="https://assets.vercel.com/image/upload/v1662130559/nextjs/Icon_light_background.png" width="45"></a>
 
-### Remote Caching
+---
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+Para os componentes foi utilizado a biblioteca Shadcn UI.
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+Uma biblioteca de componentes completa, versátil e de fácil implementação.
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+<a alt="Shadcn UI logo" href="https://ui.shadcn.com/" target="_blank" rel="noreferrer"><img src="https://avatars.githubusercontent.com/u/139895814?s=280&v=4" width="45"></a>
 
-```
-cd my-turborepo
-npx turbo login
-```
+---
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## Instalação do Repositório
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+Para instalar as dependências no repositório:
 
-```
-npx turbo link
-```
+- Utilizando npm:
 
-## Useful Links
+  `npm i`
 
-Learn more about the power of Turborepo:
+Para rodar o projeto localmente, basta rodar o comando para iniciar a imagem do banco de dados e depois rodar o comando para iniciar o projeto.
 
-- [Tasks](https://turbo.build/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/docs/reference/command-line-reference)
+`docker compose up postgres -d`
+
+`npm run dev`
+
+Para rodar as migrations (este passo é necessário somente para a aplicação local), execute o comando dentro da pasta `apps/smart-management-api`:
+
+`cd apps/smart-management-api`
+
+`npm run typeorm migration:run`
+
+Para rodar o projeto em container, com um simples comando é possivel executar o projeto em container.
+
+`docker compose up -d`
+
+Para parar o projeto em container, basta executar o comando:
+
+`docker compose down`
+
+As migrations serão executadas automaticamente quando o container for iniciado.
+
+Serão necessarias as variáveis de ambiente do projeto, é possivel encontrá-las no arquivo `.env.example` dentro de cada aplicação.
+se necessário gerar uma nova chave de encriptação, execute o comando:
+
+`openssl rand -base64 32`
+
+e cole a chave gerada no arquivo `.env` dentro de cada aplicação.
+
+### OBSERVAÇÃO
+
+A aplicação quando executada em container está com alguns bugs, para testar corretamente utilize por enquanto a aplicação local.
+
+### Rotas
+
+#### Auth
+
+- `POST /auth/signin`
+- `POST /auth/signup`
+- `POST /auth/signout`
+- `POST /auth/refresh`
+
+#### Devices
+
+- `POST /devices/register`
+- `GET /devices`
+- `GET /devices/:id`
+- `PATCH /devices/:id`
+- `DELETE /devices/:id`
+
+#### Users
+
+- `POST /users`
