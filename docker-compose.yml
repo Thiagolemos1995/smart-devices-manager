@@ -1,17 +1,9 @@
 version: "3.8"
 
 services:
-  auth-service:
-    build:
-      context: ./apps/auth-service
-      dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
-    depends_on:
-      - postgres
-
   postgres:
     image: postgres:latest
+    container_name: smart-management-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -20,6 +12,39 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - smart-management-network
 
+  smart-management-api:
+    container_name: smart-management-api
+    build:
+      context: ./apps/smart-management-api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_HOST=postgres
+    depends_on:
+      - postgres
+    networks:
+      - smart-management-network
+    expose:
+      - "8000"
+    command: sh -c "npx typeorm migration:run -d dist/orm.config.js && node dist/main.js"
+
+  web:
+    container_name: smart-management-web
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - smart-management-api
+    networks:
+      - smart-management-network
+
+networks:
+  smart-management-network:
 volumes:
   postgres_data:
