@@ -9,15 +9,20 @@ export interface DeviceStatsProps {
 export function DeviceStats({ devices }: DeviceStatsProps) {
   const activeDevices = devices.filter((device) => device.isActive).length;
   const totalDevices = devices.length;
-  const activePercentage = Math.round((activeDevices / totalDevices) * 100);
+  const activePercentage =
+    totalDevices > 0 ? Math.round((activeDevices / totalDevices) * 100) : 0;
 
   const totalPower = devices
     .filter((device) => device.isActive)
     .reduce((sum, device) => sum + device.power, 0);
 
-  const averageBattery = Math.round(
-    devices.reduce((sum, device) => sum + device.battery, 0) / devices.length
-  );
+  const averageBattery =
+    devices.length > 0
+      ? Math.round(
+          devices.reduce((sum, device) => sum + device.battery, 0) /
+            devices.length
+        )
+      : 0;
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -71,12 +76,21 @@ export function DeviceStats({ devices }: DeviceStatsProps) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            {Math.round(
-              devices
-                .filter((device) => device.type === "thermostat")
-                .reduce((sum, device) => sum + device.temperature!, 0) /
-                devices.filter((device) => device.type === "thermostat").length
-            )}
+            {devices.filter((device) => device.type === "thermostat").length > 0
+              ? Math.round(
+                  devices
+                    .filter((device) => device.type === "thermostat")
+                    .reduce((sum, device) => {
+                      const temperature = device.temperature;
+                      return (
+                        sum +
+                        (typeof temperature === "number" ? temperature : 0)
+                      );
+                    }, 0) /
+                    devices.filter((device) => device.type === "thermostat")
+                      .length
+                )
+              : 0}
             °
           </div>
           <p className="text-xs text-gray-500 mt-1">

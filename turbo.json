@@ -32,6 +32,7 @@
   },
   "globalEnv": [
     "AUTH_BASE_URL",
-    "JWT_SECRET"
+    "JWT_SECRET",
+    "NEXT_PUBLIC_DEVICES_BASE_URL"
   ]
 }

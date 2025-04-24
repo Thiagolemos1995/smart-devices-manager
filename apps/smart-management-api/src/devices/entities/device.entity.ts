@@ -2,7 +2,7 @@ import { CustomBaseEntity } from "../../common/interfaces";
 import { Column, Entity, ManyToOne, JoinColumn } from "typeorm";
 import { DeviceTypeEnum } from "../enums/device-type.enum";
 import { User } from "../../users/entities/user.entity";
-import { DeviceStatusEnum } from "./device-status.entity";
+import { DeviceStatusEnum } from "../enums/device-status.enum";
 
 @Entity("devices")
 export class Device extends CustomBaseEntity {

@@ -1,9 +1,8 @@
 import { SigninFormData, SignupFormData } from "@/lib/types";
 
+const baseUrl = process.env.AUTH_BASE_URL;
 export const authService = {
   signup: async (data: Omit<SignupFormData, "confirmPassword">) => {
-    const baseUrl = process.env.AUTH_BASE_URL;
-
     const response = await fetch(`${baseUrl}/signup`, {
       method: "POST",
       headers: {
@@ -21,8 +20,6 @@ export const authService = {
   },
 
   signin: async (data: SigninFormData) => {
-    const baseUrl = process.env.AUTH_BASE_URL;
-
     const response = await fetch(`${baseUrl}/signin`, {
       method: "POST",
       headers: {
@@ -42,7 +39,7 @@ export const authService = {
   refreshToken: async (oldRefreshToken: string) => {
     const baseUrl = process.env.AUTH_BASE_URL;
 
-    const response = await fetch(`${baseUrl}/refresh-token`, {
+    const response = await fetch(`${baseUrl}/refresh`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",

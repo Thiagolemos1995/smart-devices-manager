@@ -7,7 +7,7 @@ import {
   IsOptional,
 } from "class-validator";
 import { DeviceTypeEnum } from "../enums/device-type.enum";
-import { DeviceStatusEnum } from "../entities/device-status.entity";
+import { DeviceStatusEnum } from "../enums/device-status.enum";
 
 export class CreateDeviceDto {
   @IsNotEmpty()
