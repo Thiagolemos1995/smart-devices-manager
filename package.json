@@ -26,6 +26,8 @@
   "dependencies": {
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/passport": "^11.0.5",
+    "add": "^2.0.6",
+    "dayjs": "^1.11.13",
     "jose": "^6.0.10",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",

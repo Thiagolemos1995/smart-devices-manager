@@ -1,6 +1,17 @@
 "use client";
 
-import { Battery, Power, Signal, Thermometer, Smartphone } from "lucide-react";
+import {
+  Battery,
+  Power,
+  Signal,
+  Thermometer,
+  Smartphone,
+  Cctv,
+  Lightbulb,
+  Speaker,
+  LockIcon,
+  Trash2Icon,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -10,13 +21,16 @@ import {
 } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Device } from "@/lib/interfaces";
+import dayjs from "dayjs";
+import { Button } from "@/components/ui/button";
 
 interface DeviceCardProps {
   device: Device;
   onToggle: () => void;
+  onRemove: () => void;
 }
 
-export function DeviceCard({ device, onToggle }: DeviceCardProps) {
+export function DeviceCard({ device, onToggle, onRemove }: DeviceCardProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "online":
@@ -25,6 +39,8 @@ export function DeviceCard({ device, onToggle }: DeviceCardProps) {
         return "text-gray-400";
       case "warning":
         return "text-amber-500";
+      case "error":
+        return "text-red-500";
       default:
         return "text-gray-500";
     }
@@ -34,6 +50,14 @@ export function DeviceCard({ device, onToggle }: DeviceCardProps) {
     switch (type) {
       case "thermostat":
         return <Thermometer className="h-6 w-6" />;
+      case "camera":
+        return <Cctv className="h-6 w-6" />;
+      case "light":
+        return <Lightbulb className="h-6 w-6" />;
+      case "speaker":
+        return <Speaker className="h-6 w-6" />;
+      case "opener":
+        return <LockIcon className="h-6 w-6" />;
       default:
         return <Smartphone className="h-6 w-6" />;
     }
@@ -59,7 +83,17 @@ export function DeviceCard({ device, onToggle }: DeviceCardProps) {
               </div>
             </div>
           </div>
-          <Switch checked={device.isActive} onCheckedChange={onToggle} />
+          <div className="flex flex-col items-center gap-2">
+            <Switch checked={device.isActive} onCheckedChange={onToggle} />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onRemove}
+              className="cursor-pointer"
+            >
+              <Trash2Icon />
+            </Button>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="h-full">
@@ -83,7 +117,7 @@ export function DeviceCard({ device, onToggle }: DeviceCardProps) {
         )}
       </CardContent>
       <CardFooter className="border-t pt-4 text-xs text-gray-500">
-        Last updated: {device.lastUpdated}
+        Last updated: {dayjs(device.updatedAt).format("DD/MM/YYYY HH:mm")}
       </CardFooter>
     </Card>
   );

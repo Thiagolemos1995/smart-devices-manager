@@ -7,5 +7,15 @@ export interface Device {
   battery: number;
   power: number;
   temperature?: number;
-  lastUpdated: string;
+  updatedAt: string;
+}
+
+export interface DeviceResponse {
+  data: Device[];
+  metadata: {
+    count: number;
+    order: string;
+    skip: number;
+    take: number;
+  };
 }
