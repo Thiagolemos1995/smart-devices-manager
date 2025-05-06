@@ -104,7 +104,9 @@ A aplicação quando executada em container está com alguns bugs, para testar c
 local:
 
 - http://localhost:8000/device-service
-  container:
+
+container:
+
 - http://smart-management-api:8000/devices-service
 
 #### Auth
@@ -284,7 +286,9 @@ local:
 local:
 
 - http://localhost:3000/
-  container:
+
+container:
+
 - http://smart-management-web:3000
 
 ### Pages
@@ -300,7 +304,9 @@ Marketing page
 Sign in
 
 - `{{base_url}}/signin/`
-  Sign up
+
+Sign up
+
 - `{{base_url}}/signup/`
 
 #### Protected
