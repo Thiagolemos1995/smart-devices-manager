@@ -99,6 +99,14 @@ A aplicação quando executada em container está com alguns bugs, para testar c
 
 ### Rotas
 
+#### Base Url
+
+local:
+
+- http://localhost:8000/device-service
+  container:
+- http://smart-management-api:8000/devices-service
+
 #### Auth
 
 - `POST /auth/signin`
@@ -269,6 +277,42 @@ A aplicação quando executada em container está com alguns bugs, para testar c
 
 - `POST /users`
 
+## Web application
+
+### Base Url
+
+local:
+
+- http://localhost:3000/
+  container:
+- http://smart-management-web:3000
+
+### Pages
+
+#### Unprotected
+
+Marketing page
+
+- `{{base_url}}/`
+
+#### Authentication
+
+Sign in
+
+- `{{base_url}}/signin/`
+  Sign up
+- `{{base_url}}/signup/`
+
+#### Protected
+
+Dashboard
+
+- `{{base_url}}/dashboard/`
+
+### Basic User Flow
+
+![User Flow](./docs/images/basicuserflow.png)
+
 ### Respostas do Teste:
 
 1. Arquitetura Geral:
@@ -338,3 +382,9 @@ A aplicação quando executada em container está com alguns bugs, para testar c
    comprometer a performance?
 
    - Estratégias: Utilizaria instâncias reservadas ou spot instances para reduzir custos, configuraria o Auto Scaling para otimizar o uso de recursos e usaria o AWS Cost Explorer para monitorar e otimizar gastos.
+
+## Observações
+
+Falha ao rodar a migration: O comando no readme não especifica o databaseSource
+
+Falha ao bater nas apis: As rotas no readme não incluem o path completo, com o "devices-service"
